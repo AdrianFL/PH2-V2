@@ -22,6 +22,7 @@ function generaForm(){
 	if(sessionStorage["nequipo1"]!=null && sessionStorage["nequipo1"]!=""){
 		document.getElementById("nequipo1").value = sessionStorage["nequipo1"];
 		document.getElementById("nequipo2").value = sessionStorage["nequipo2"];
+		generaBoton();
 	}
 	return false;
 }
@@ -72,9 +73,8 @@ function generaBoton(){
 
 //Funcion que redirige la página y guarda las variables en sessionStorage();
 function jugar(){
+	console.log("queee");
 	sessionStorage["nequipo1"] = document.getElementById("nequipo1").value; 
 	sessionStorage["nequipo2"] = document.getElementById("nequipo2").value;
-	
-	document.location.replace("juego.html");
 	return true;
 }
