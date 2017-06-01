@@ -22,12 +22,27 @@ function dibujaBanquillo(){
 
 	let i = 0;
 	for(i = 0; i<numJugadores; i++){
-		//------Completar, obvio
 		if(i<numJugadores/2){
-			var jugador = creaJugador(sessionStorage["nequipo1"], ); 
+			let jugador = creaJugador(sessionStorage["nequipo1"], 4*dim+i*dim+dim/4+i*3,9*dim+dim/4);
+			
+			//carga de la ficha y pintado en pantalla
+			jugador.img.onload = function(){
+				ctx.drawImage(jugador.img, jugador.posx,jugador.posy,dim,dim);
+			}
+			jugador.asignaColor("rojo");
+			equipo1.push(jugador);
 		}else{
-			var jugador = creaJugador(sessionStorage["nequipo2"], ); 
+			let jugador = creaJugador(sessionStorage["nequipo2"], 5*dim+i*dim+dim/2,9*dim+dim/4);
+			
+			//carga de la ficha y pintado en pantalla
+			jugador.img.onload = function(){
+				ctx.drawImage(jugador.img, jugador.posx,jugador.posy,dim,dim);
+			}
+			jugador.asignaColor("azul");
+			equipo2.push(jugador);
 		}
+
+
 	}
 	
 	//--------sessionStorage solo soporta strings, así que colocarlos en sessionStorage para guardar la partida requiere hacer un JSON

@@ -73,7 +73,6 @@ function generaBoton(){
 
 //Funcion que redirige la página y guarda las variables en sessionStorage();
 function jugar(){
-	console.log("queee");
 	sessionStorage["nequipo1"] = document.getElementById("nequipo1").value; 
 	sessionStorage["nequipo2"] = document.getElementById("nequipo2").value;
 	return true;
