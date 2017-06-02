@@ -26,6 +26,9 @@ body{
 			width:100%;
 			height:auto;
 		}
+			body>main>section<h2{
+				pointer-events:none;
+			}
 			body>main>section>form{
 				border-bottom: 2px 
 			}

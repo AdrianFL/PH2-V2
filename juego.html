@@ -16,7 +16,11 @@
 	<main>
 		<section>
 			<h2>Terreno de juego</h2>
-			<canvas id="cv01" width="480" height="600" ></canvas>
+			<canvas id="cv01" width="480" height="600" 
+			onclick="gameclick(event);dibujaBanquillo();" 
+			onmousedown="down(event);"
+			onmouseup="up(event);">
+			</canvas>
 		</section>
 	</main>
 </body>
