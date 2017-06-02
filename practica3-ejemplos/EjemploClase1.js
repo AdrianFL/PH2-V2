@@ -1,3 +1,6 @@
+
+var ficha = {"fila":0,"columna":0};
+
 function cuadrado()
 {
 	let cv = document.getElementById('cv01');
@@ -87,6 +90,22 @@ function dibujarCuadricula(){
 	ctx.stroke();
 }
 
+function redibujarCanvas(){
+	let cv = document.getElementById("cv01"),
+		ctx = cv.getContext("2d"),
+		img = new Image(),
+		dim = cv.width/3;
+	//Limpiamos el canvas
+	cv.width = cv.width;
+
+	//Redibujamos todo
+	dibujarCuadricula();
+	img.onload = function(){
+		ctx.drawImage(img, ficha.columna*dim, ficha.fila*dim, dim, dim);
+	};
+	img.src = "ficharoja.svg";
+}
+
 function mouse_move(e){
 	return;
 	let cv = e.target,
@@ -96,9 +115,19 @@ function mouse_move(e){
 		fila = Math.floor( y / dim),
 		columna = Math.floor( x / dim);
 
-	console.log(" Posicion: ${x} - ${y}");
+	/*console.log(" Posicion: ${x} - ${y}");
 	console.log(' Posicion: '+ x +' - '+ y);
-	console.log('fila:'+fila+' columna:'+columna);
+	console.log('MOVING:fila:'+fila+' columna:'+columna);*/
+
+	if(cv.getAttribute("data-move")){
+		//ESTOY ARRASTRNDO LA FICHA
+		console.log('MOVE=>fila:'+fila+' columna:'+columna);
+		if(ficha.columna != columna || ficha.fila != fila){
+			ficha.columna = columna;
+			ficha.fila = fila;
+			redibujarCanvas();
+		}	
+	}
 }
 
 function mouse_click(e){
@@ -115,13 +144,55 @@ function mouse_click(e){
 
 	console.log(" Posicion: ${x} - ${y}");
 	console.log(' Posicion: '+ x +' - '+ y);
-	console.log('fila:'+fila+' columna:'+columna);
+	console.log('CLICK=>fila:'+fila+' columna:'+columna);
 
 	cv.width = cv.width;
 	dibujarCuadricula();
-	let ctx = cv.getContext('2d');
+	let ctx = cv.getContext('2d'),
+		img = new Image();
+		
+	img.onload= function(){
+		
+		ctx.drawImage(img, columna*dim, fila*dim, dim, dim);
+ 	};
+	img.src = "ficharoja.svg";
+
 	ctx.beginPath();
 	ctx.strokeStyle = '#a00';
 	ctx.lineWidth = 4;
-	ctx.strokeRect(columna * dim, fila * dim, dim, dim)
+	ctx.strokeRect(columna * dim, fila * dim, dim, dim);
 }
+
+function mouse_down(e){
+	let cv = e.target,
+		x = e.offsetX,
+		y = e.offsetY,
+		dim = cv.width / 3,
+		fila = Math.floor( y / dim),
+		columna = Math.floor( x / dim);
+
+		if(x<1 || x>cv.width-1 || y<1 || y>cv.height-1){
+			return;
+		}
+	console.log('DOWN=>fila:'+fila+' columna:'+columna);
+	if(ficha.columna == columna && ficha.fila == fila){ //Hay ficha
+		cv.setAttribute("data-down","true");
+	}
+}
+
+function mouse_up(e){
+	let cv = e.target,
+		x = e.offsetX,
+		y = e.offsetY,
+		dim = cv.width / 3,
+		fila = Math.floor( y / dim),
+		columna = Math.floor( x / dim);
+
+		if(x<1 || x>cv.width-1 || y<1 || y>cv.height-1){
+			return;
+		}
+	console.log('UP=>fila:'+fila+' columna:'+columna);
+	
+	cv.removeAttribute("data-down");
+}
+

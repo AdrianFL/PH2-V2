@@ -10,7 +10,12 @@
 	<h1>Ejemplo de canvas y eventos</h1>
 	<section>
 		<h2>Canvas 1</h2>
-		<canvas id="cv01" width="480" height="480" onmousemove="mouse_move(event);" onclick="mouse_click(event);"></canvas>
+		<canvas id="cv01" width="480" height="480"
+		 onmousedown="mouse_down(event);"
+		 onmouseup="mouse_up(event);" 
+		 onmousemove="mouse_move(event);"
+		 onclick="mouse_click(event);">
+		</canvas>
 		<footer>
 			<button onclick="dibujarCuadricula();">Cuadricula</button>
 		</footer>
