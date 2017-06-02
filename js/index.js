@@ -3,8 +3,8 @@ function generaForm(){
 	
 	let frm = document.querySelector("body>main>section>form");
 	
-	let equipo1 = sessionStorage["nequipo1"];
-	let equipo2 = sessionStorage["nequipo2"];
+	let equipo1 = sessionStorage["equipo1"];
+	let equipo2 = sessionStorage["equipo2"];
 	
 	frm.innerHTML = 
 		"<fieldset>"+
@@ -19,9 +19,13 @@ function generaForm(){
 		;
 	
 	
-	if(sessionStorage["nequipo1"]!=null && sessionStorage["nequipo1"]!=""){
-		document.getElementById("nequipo1").value = sessionStorage["nequipo1"];
-		document.getElementById("nequipo2").value = sessionStorage["nequipo2"];
+	if(sessionStorage["equipo1"]!=null && sessionStorage["equipo1"]!=""){
+		//document.getElementById("nequipo1").value = sessionStorage["nequipo1"];
+		//document.getElementById("nequipo2").value = sessionStorage["nequipo2"];
+		
+		document.getElementById("nequipo1").value = window.JSON.parse(sessionStorage["equipo1"]).nombre;
+		document.getElementById("nequipo2").value = window.JSON.parse(sessionStorage["equipo2"]).nombre;
+		
 		generaBoton();
 	}
 	return false;
@@ -52,9 +56,7 @@ function generaBoton(){
 		let nequipo1 = document.getElementById("nequipo1").value;
 		let nequipo2 = document.getElementById("nequipo2").value;
 
-		console.log("que paisha-"+ nequipo1 + "-" + nequipo2);
 		if(nequipo1!="" && nequipo1!=null && nequipo2!="" && nequipo2!=null){
-			
 			frm.appendChild(boton);
 		}
 	}else{
@@ -63,7 +65,6 @@ function generaBoton(){
 		let nequipo1 = document.getElementById("nequipo1").value;
 		let nequipo2 = document.getElementById("nequipo2").value;
 		
-		console.log("YEPPPA-"+ nequipo1 + "-" + nequipo2);
 		if(nequipo1=="" || nequipo1==null || nequipo2=="" || nequipo2==null){
 			frm.removeChild(comprueba);
 		}
@@ -73,7 +74,11 @@ function generaBoton(){
 
 //Funcion que redirige la página y guarda las variables en sessionStorage();
 function jugar(){
-	sessionStorage["nequipo1"] = document.getElementById("nequipo1").value; 
-	sessionStorage["nequipo2"] = document.getElementById("nequipo2").value;
+	//sessionStorage["nequipo1"] = document.getElementById("nequipo1").value; 
+	//sessionStorage["nequipo2"] = document.getElementById("nequipo2").value;
+	
+	sessionStorage["equipo1"] ='{"nombre":"'+document.getElementById("nequipo1").value+'","jugadores":[]}';
+	sessionStorage["equipo2"] ='{"nombre":"'+document.getElementById("nequipo2").value+'","jugadores":[]}';
+
 	return true;
 }

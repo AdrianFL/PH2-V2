@@ -1,3 +1,4 @@
+
 function dibujarTerreno(){
 	let cv = document.getElementById('cv01');
 	let ctx = cv.getContext('2d');
@@ -77,9 +78,83 @@ function dibujarPorterias()
 	ctx.fillRect(19*dim, 5*dim, dim, dim);
 }
 
+//#####################
+function generarGrid(){
+	let grid = "{[";
+	
+	for(let i = 0; i< 9; i++){
+		for(let j = 0; j<20; j++){
+			grid+='{"fila":'+i+',"columna":'+j+',"ocupado":false}';;
+		}
+	}
+	
+	grid+="]}";
+	sessionStorage["grid"] = grid;
+}
+
+function gameclick(e){
+	//Dependiendo de quien tenga el turno
+	if(sessionStorage["turno"] == "1"){
+		let cv = e.target,
+			x = e.offsetX,
+			y = e.offsetY,
+			dim = cv.width / 20,
+			fila = Math.floor( y / dim),
+			columna = Math.floor( x / dim);
+
+		if(x<1 || x>cv.width-1 || y<1 || y>cv.height-1){
+			return;
+		}
+
+		console.log(" Posicion: ${x} - ${y}");
+		console.log(' Posicion: '+ x +' - '+ y);
+		console.log('CLICK=>fila:'+fila+' columna:'+columna);
+
+		cv.width = cv.width;
+		
+		dibujarTerreno();
+		
+		let ctx = cv.getContext('2d'),
+			img = new Image();
+			
+		img.onload= function(){
+			ctx.drawImage(img, columna*dim, fila*dim, dim, dim);
+		};
+		img.src = "img/ficharoja.svg";
+		
+		sessionStorage["turno"] = "2";
+	}else{
+		
+		sessionStorage["turno"] = "1";
+	}
+}
+
+
+function down(e){
+	//Este funciona cuando haces click
+	
+	//Hacer drag-and-drop con esto
+}
+
+function up(e){
+	//Este también
+	
+	//Hacer drag-and-drop con esto too
+}
+//#####################
+
+
 function cargarJuego(){
 	//comprobarNombresEquipos();
 	dibujarTerreno();
+	
+	//#####################
+	//Se genera el array de datos del grid
+	generarGrid();
+	
+	//Asignamos el turno inicial
+	sessionStorage["turno"] = "1";
+	//#####################
 }
 
 //Funcion para comprobar que ambos equipos tienen nombres en sessionStorage
@@ -87,7 +162,7 @@ function cargarJuego(){
 function comprobarNombresEquipos(){
 	if(sessionStorage)
 	{
-		if(sessionStorage.getItem("nequipo1")&&sessionStorage.getItem("nequipo2"))
+		if(sessionStorage.getItem("equipo1")&&sessionStorage.getItem("equipo2"))
 		{
 			return;
 		}
