@@ -1,3 +1,17 @@
+//Inicialización del sessionStorage
+if(sessionStorage["equipo1"]==null || sessionStorage["equipo1"]==""){
+	sessionStorage["equipo1"] ='{"nombre":"","jugadores":[]}';
+	sessionStorage["equipo2"] ='{"nombre":"","jugadores":[]}';
+}else{
+	if(sessionStorage["nequipo1"]!=null && sessionStorage["nequipo1"]!=""){
+		sessionStorage["equipo1"] ='{"nombre":"'+sessionStorage["nequipo1"]+'","jugadores":[]}';
+		sessionStorage["equipo2"] ='{"nombre":"'+sessionStorage["nequipo2"]+'","jugadores":[]}';
+	}else{
+		sessionStorage["equipo1"] ='{"nombre":"","jugadores":[]}';
+		sessionStorage["equipo2"] ='{"nombre":"","jugadores":[]}';
+	}
+}
+
 //funcion que genera el formulario de juego
 function generaForm(){
 	
@@ -19,12 +33,10 @@ function generaForm(){
 		;
 	
 	
-	if(sessionStorage["equipo1"]!=null && sessionStorage["equipo1"]!=""){
-		//document.getElementById("nequipo1").value = sessionStorage["nequipo1"];
-		//document.getElementById("nequipo2").value = sessionStorage["nequipo2"];
+	if( sessionStorage["nequipo1"]!=null &&  sessionStorage["nequipo1"]!=""){
 		
-		document.getElementById("nequipo1").value = window.JSON.parse(sessionStorage["equipo1"]).nombre;
-		document.getElementById("nequipo2").value = window.JSON.parse(sessionStorage["equipo2"]).nombre;
+		document.getElementById("nequipo1").value = sessionStorage["nequipo1"];
+		document.getElementById("nequipo2").value = sessionStorage["nequipo2"];
 		
 		generaBoton();
 	}
@@ -40,17 +52,32 @@ function generaBoton(){
 	let comprueba = document.getElementById("botonPlay");
 	
 	if(comprueba == null){
-			
-	
 		//Si no existe, se añade en caso de estar los nombres
 		//Creamos el boton
 		let boton = document.createElement("input");
 		
 		//Se le añaden sus atributos
 		boton.setAttribute("id","botonPlay");
-		boton.setAttribute("type","submit");
 		boton.setAttribute("value","JUGAR");
-		boton.setAttribute("onclick","jugar();");
+		boton.addEventListener('click', function()
+			{
+				//Guardamos los nombres en la sesión
+				sessionStorage["nequipo1"] = document.getElementById("nequipo1").value;
+				sessionStorage["nequipo2"] = document.getElementById("nequipo2").value;
+				
+				//Actualizamos los equipos
+				let aux1 = window.JSON.parse(sessionStorage["equipo1"]);
+				aux1.nombre = sessionStorage["nequipo1"];
+				sessionStorage["equipo1"] = window.JSON.stringify(aux1);
+				
+				let aux2 = window.JSON.parse(sessionStorage["equipo2"]);
+				aux2.nombre = sessionStorage["nequipo2"];
+				sessionStorage["equipo2"] = window.JSON.stringify(aux2);
+				
+				document.querySelector("body>main>section>form").submit();
+			});
+		//boton.setAttribute("type","submit");
+		
 		
 		//Se verifica que los nombres estén puestos
 		let nequipo1 = document.getElementById("nequipo1").value;
@@ -69,16 +96,5 @@ function generaBoton(){
 			frm.removeChild(comprueba);
 		}
 	}
-	return true;
-}
-
-//Funcion que redirige la página y guarda las variables en sessionStorage();
-function jugar(){
-	//sessionStorage["nequipo1"] = document.getElementById("nequipo1").value; 
-	//sessionStorage["nequipo2"] = document.getElementById("nequipo2").value;
-	
-	sessionStorage["equipo1"] ='{"nombre":"'+document.getElementById("nequipo1").value+'","jugadores":[]}';
-	sessionStorage["equipo2"] ='{"nombre":"'+document.getElementById("nequipo2").value+'","jugadores":[]}';
-
 	return true;
 }
