@@ -9,6 +9,15 @@ if(sessionStorage["equipo2"]!=null && sessionStorage["equipo2"]!=""){
 
 //Función que carga las funciones necesarias para hacer funcional el banquillo de jugadores
 function cargaBanquillo(){
+	//Iniciamos la fase de colocacion
+	if(!sessionStorage["fase"]){
+		sessionStorage["fase"]="colocar";
+	}else{
+		if(sessionStorage["fase"]=="intermedio"){
+			sessionStorage["fase"]="colocar";
+		}
+	}
+	
 	cargaPlantilla();
 	dibujaBanquillo();
 }

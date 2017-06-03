@@ -32,7 +32,32 @@ body{
 			body>main>section>form{
 				border-bottom: 2px 
 			}
-		
+			body>main>section>button{
+				display:block;
+				margin:0.1em auto;
+				
+				height:40px;
+				width:auto;
+				
+				border:2px solid #00ff00;
+				background-color: #99ff99;
+				border-radius:5px;
+				
+				font-weight:600;
+				font-size:20px;
+				transition:all 0.3s forwards;
+			}
+			
+			body>main>section>button:hover{
+				background-color:#66ff66;
+				color:white;
+				transition:all 0.5s forwards;
+			}
+			body>main>section>button:focus{
+				background-color:#66CC66;
+				color:white;
+			}
+			
 	body>header{
 		width:90%;
 		height:auto;
@@ -102,12 +127,12 @@ form{
 			background-color:#66CC66;
 			color:white;
 		}
-			form>fieldset>input[id=botonPlay]{
-				margin: 0 auto;
-				padding:0;
-				cursor:pointer;
-				text-align:center;
-			}
+		form>fieldset>input[id=botonPlay]{
+			margin: 0 auto;
+			padding:0;
+			cursor:pointer;
+			text-align:center;
+		}
 
 
 
