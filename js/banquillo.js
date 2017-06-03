@@ -23,7 +23,7 @@ function cargaPlantilla(){
 		for(let i = 0; i<numJugadores/2; i++){
 			equipo1.jugadores.push({"posx":0,"posy":0,"img":"img/ficharoja.svg","colocado":"false"});
 		}
-		console.log(equipo1);
+		
 		for(let i = 0; i<numJugadores/2; i++){
 			equipo2.jugadores.push({"posx":0,"posy":0,"img":"img/fichaazul.svg","colocado":"false"});
 		}
@@ -32,7 +32,7 @@ function cargaPlantilla(){
 		for(let x = 0; x<numJugadores/2; x++){
 				//let jugador = creaJugador(sessionStorage["nequipo1"], 4*dim+i*dim+dim/4+i*3,9*dim+dim/4);
 				//Metemos los datos en el JSON de equipo
-				equipo1.jugadores[x].posx = 4*dim+x*dim;
+				equipo1.jugadores[x].posx = 3*dim+x*dim;
 				equipo1.jugadores[x].posy = 9*dim+dim/4;
 				
 				//carga de la ficha y pintado en pantalla
@@ -68,40 +68,42 @@ function dibujaBanquillo(){
 	let ctx = cv.getContext('2d');
 	let dim = cv.width / 20;
 	
-	//Actualizamos los jugadores del sessionStorage
-	equipo1 = window.JSON.parse(sessionStorage["equipo1"]);
-	equipo2 = window.JSON.parse(sessionStorage["equipo2"]);
-	
-	//bancoIzq
-	ctx.strokeStyle = "#a00";
-	ctx.lineWidth = 4;
-	ctx.strokeRect(3*dim, 9*dim, 7*dim, 1.5*dim);
+	//Si estamos en la fase de colocar fichas, se dibuja el banquillo
+	if(sessionStorage["fase"] == "colocar"){
+
+		
+		//Actualizamos los jugadores del sessionStorage
+		equipo1 = window.JSON.parse(sessionStorage["equipo1"]);
+		equipo2 = window.JSON.parse(sessionStorage["equipo2"]);
+		
+		//bancoIzq
+		ctx.strokeStyle = "#a00";
+		ctx.lineWidth = 4;
+		ctx.strokeRect(2*dim, 9*dim, 7*dim, 1.5*dim);
+		
+		//bancoDech
+		ctx.strokeRect(11*dim, 9*dim, 7*dim, 1.5*dim);
+	}
 	
 	for(let i=0; i<equipo1.jugadores.length;i++){
-		if(equipo1.jugadores[i].colocado == "false"){
-			let img = new Image();
-		
-			img.onload = function(){
-				ctx.drawImage(img,equipo1.jugadores[i].posx,equipo1.jugadores[i].posy,dim,dim);
-			}
-			
-			img.src = equipo1.jugadores[i].img;
+		let img = new Image();
+	
+		img.onload = function(){
+			ctx.drawImage(img,equipo1.jugadores[i].posx,equipo1.jugadores[i].posy,dim,dim);
 		}
+		
+		img.src = equipo1.jugadores[i].img;
 	}
 	
-	//bancoDech
-	ctx.strokeRect(11*dim, 9*dim, 7*dim, 1.5*dim);
+	
 	
 	for(let i=0; i<equipo2.jugadores.length;i++){
-		if(equipo2.jugadores[i].colocado == "false"){
-			let img = new Image();
-			
-			img.onload = function(){
-				ctx.drawImage(img,equipo2.jugadores[i].posx,equipo2.jugadores[i].posy,dim,dim);
-			}
-			img.src = equipo2.jugadores[i].img;
+		let img = new Image();
+		
+		img.onload = function(){
+			ctx.drawImage(img,equipo2.jugadores[i].posx,equipo2.jugadores[i].posy,dim,dim);
 		}
+		img.src = equipo2.jugadores[i].img;
 	}
-	
 }
 

@@ -5,20 +5,6 @@ var enjuego1 = null;
 var banquillo2 = null;
 var enjuego2 = null;
 
-if(sessionStorage["equipo1"]!=null && sessionStorage["equipo1"]!=""){
-	banquillo1 = window.JSON.parse(sessionStorage["equipo1"]);
-	enjuego1 = window.JSON.parse(sessionStorage["equipo1"]);
-	enjuego1.jugadores.slice(0,numJugadores);
-}
-if(sessionStorage["equipo2"]!=null && sessionStorage["equipo2"]!=""){
-	banquillo2 = window.JSON.parse(sessionStorage["equipo2"]);
-	enjuego2 = window.JSON.parse(sessionStorage["equipo2"]);
-	enjuego2.jugadores.slice(0,numJugadores);
-}
-
-//console.log(banquillo1);
-
-
 function dibujarTerreno(){
 	let cv = document.getElementById('cv01');
 	let ctx = cv.getContext('2d');
@@ -161,16 +147,22 @@ function colocacion(e){
 			}
 			
 			if(selec != -1){
-				//Se mete en el array de juego y se borra del array de banquillo	
-				enjuego1.jugadores.push(window.JSON.stringify(banquillo1.jugadores[selec]));
-				banquillo1.jugadores[selec].colocado = "true";
-				sessionStorage["equipo1"] = window.JSON.stringify(banquillo1);
-				
 				//Pinta el recuadro que remarca la ficha
 				ctx.beginPath();
 				ctx.strokeStyle = '#a22';
 				ctx.lineWidth = 2;
-				ctx.strokeRect(columna * dim, fila * dim+dim/4, dim, dim);
+				
+				if(banquillo1.jugadores[selec].colocado == "false"){
+					ctx.strokeRect(columna * dim, fila * dim+dim/4, dim, dim);
+				}else{
+					ctx.strokeRect(columna * dim, fila * dim, dim, dim);
+				}
+				
+				
+				//Se mete en el array de juego y se borra del array de banquillo	
+				//enjuego1.jugadores.push(window.JSON.stringify(banquillo1.jugadores[selec]));
+				banquillo1.jugadores[selec].colocado = "true";
+				sessionStorage["equipo1"] = window.JSON.stringify(banquillo1);
 				
 				//Se pone seleccionado igual a true si se ha seleccionado la ficha
 				sessionStorage["selected"] = "true";
@@ -203,27 +195,42 @@ function colocacion(e){
 			//Condicion para colocar la ficha en la pista
 			let colocable = false;
 			
+			//Si está dentro del rango, se mete
 			if(fila>=0 && fila<9 && columna>0 && columna<10){
 				colocable = true;
+				
+				//si no coincide con ninguna posición de ninguna ficha, sigue siendo cierto
+				for(let i = 0; i<banquillo1.jugadores.length;i++){;
+					if(Math.floor(banquillo1.jugadores[i].posx/dim) == columna && Math.floor(banquillo1.jugadores[i].posy/dim) == fila){
+						colocable = false;
+					}
+				}
 			}
 			
 			//Coloca la imagen de la ficha donde desearía colocarlo
 			if(colocable){
-				let ctx = cv.getContext('2d'),
-					img = new Image();
+				//Actualizamos la posición de los objetos
+				banquillo1.jugadores[selec].posy = fila*dim;
+				banquillo1.jugadores[selec].posx = columna*dim;
+				sessionStorage["equipo1"] = window.JSON.stringify(banquillo1);
+				
+				let ctx = cv.getContext('2d');
+					/*img = new Image();
 					
 				img.onload= function(){
 					ctx.drawImage(img, columna*dim, fila*dim, dim, dim);
 				};
-				img.src = "img/ficharoja.svg";
+				img.src = "img/ficharoja.svg";*/
 				
 				//Pinta el recuadro que remarca la ficha
 				ctx.beginPath();
 				ctx.strokeStyle = '#a22';
 				ctx.lineWidth = 2;
+				
 				ctx.strokeRect(columna * dim, fila * dim, dim, dim);
 				
 				//Cambia de turno
+				sessionStorage["selected"]= "false";
 				sessionStorage["turno"] = "2";
 			}
 		}
@@ -259,25 +266,28 @@ function colocacion(e){
 			selec = -1;
 			
 			for(let i = 0; i<banquillo2.jugadores.length;i++){;
-				console.log(Math.floor(banquillo2.jugadores[i].posx/dim) + "- " + 
-				Math.floor(banquillo2.jugadores[i].posy/dim)+ " es igual a " 
-				+ columna +" - " + fila);
 				if(Math.floor(banquillo2.jugadores[i].posx/dim) == columna && Math.floor(banquillo2.jugadores[i].posy/dim) == fila){
 					selec = i;
 				}
 			}
 			
 			if(selec != -1){
-				//Se mete en el array de juego y se borra del array de banquillo	
-				enjuego2.jugadores.push(window.JSON.stringify(banquillo2.jugadores[selec]));
-				banquillo2.jugadores[selec].colocado = "true";
-				sessionStorage["equipo2"] = window.JSON.stringify(banquillo2);
-				
 				//Pinta el recuadro que remarca la ficha
 				ctx.beginPath();
 				ctx.strokeStyle = '#a22';
 				ctx.lineWidth = 2;
-				ctx.strokeRect(columna * dim, fila * dim+dim/4, dim, dim);
+				
+				if(banquillo2.jugadores[selec].colocado == "false"){
+					ctx.strokeRect(columna * dim, fila * dim+dim/4, dim, dim);
+				}else{
+					ctx.strokeRect(columna * dim, fila * dim, dim, dim);
+				}
+				
+				
+				//Se mete en el array de juego y se borra del array de banquillo	
+				//enjuego1.jugadores.push(window.JSON.stringify(banquillo1.jugadores[selec]));
+				banquillo2.jugadores[selec].colocado = "true";
+				sessionStorage["equipo2"] = window.JSON.stringify(banquillo2);
 				
 				//Se pone seleccionado igual a true si se ha seleccionado la ficha
 				sessionStorage["selected"] = "true";
@@ -310,27 +320,42 @@ function colocacion(e){
 			//Condicion para colocar la ficha en la pista
 			let colocable = false;
 			
-			if(fila>=10 && fila<19 && columna>0 && columna<10){
+			//Si está dentro de los límites del segundo campo
+			if(fila>=0 && fila<9 && columna>=10 && columna<19){
 				colocable = true;
+				
+				//Si no coincide con ninguna ficha del jugador 2, todo ok
+				for(let i = 0; i<banquillo2.jugadores.length;i++){;
+					if(Math.floor(banquillo2.jugadores[i].posx/dim) == columna && Math.floor(banquillo2.jugadores[i].posy/dim) == fila){
+						colocable = false;
+					}
+				}
 			}
 			
 			//Coloca la imagen de la ficha donde desearía colocarlo
 			if(colocable){
-				let ctx = cv.getContext('2d'),
-					img = new Image();
+				//Actualizamos la posición de los objetos
+				banquillo2.jugadores[selec].posy = fila*dim;
+				banquillo2.jugadores[selec].posx = columna*dim;
+				sessionStorage["equipo2"] = window.JSON.stringify(banquillo2);
+				
+				let ctx = cv.getContext('2d');
+					/*img = new Image();
 					
 				img.onload= function(){
 					ctx.drawImage(img, columna*dim, fila*dim, dim, dim);
 				};
-				img.src = "img/fichaazul.svg";
+				img.src = "img/ficharoja.svg";*/
 				
 				//Pinta el recuadro que remarca la ficha
 				ctx.beginPath();
 				ctx.strokeStyle = '#a22';
 				ctx.lineWidth = 2;
+				
 				ctx.strokeRect(columna * dim, fila * dim, dim, dim);
 				
 				//Cambia de turno
+				sessionStorage["selected"]= "false";
 				sessionStorage["turno"] = "1";
 			}
 		}
@@ -368,6 +393,23 @@ function cargarJuego(){
 	if(!sessionStorage["fase"]){
 		sessionStorage["fase"]="colocar";
 	}
+	
+	//if(!sessionStorage["selected"]){
+		sessionStorage["selected"] = "false";
+	//}
+	
+	//Datos principales: banquillo y fichas en juego
+	if(sessionStorage["equipo1"]!=null && sessionStorage["equipo1"]!=""){
+		banquillo1 = window.JSON.parse(sessionStorage["equipo1"]);
+		enjuego1 = window.JSON.parse(sessionStorage["equipo1"]);
+		enjuego1.jugadores.splice(0,numJugadores);
+	}
+	if(sessionStorage["equipo2"]!=null && sessionStorage["equipo2"]!=""){
+		banquillo2 = window.JSON.parse(sessionStorage["equipo2"]);
+		enjuego2 = window.JSON.parse(sessionStorage["equipo2"]);
+		enjuego2.jugadores.splice(0,numJugadores);
+	}
+	
 	//#####################
 }
 
