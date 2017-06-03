@@ -1,4 +1,5 @@
 var numJugadores = 10;
+var selec = -1;
 var banquillo1 = null;
 var enjuego1 = null;
 var banquillo2 = null;
@@ -112,6 +113,12 @@ function dibujarPorterias()
 }*/
 
 function gameclick(e){
+	if(sessionStorage["fase"] == "colocar"){
+		colocacion(e);
+	}
+}
+
+function colocacion(e){
 	//Dependiendo de quien tenga el turno
 	if(sessionStorage["turno"] == "1"){
 		//Si no hay una ficha cogida en el turno del jugador 1, se escoge ficha
@@ -142,7 +149,7 @@ function gameclick(e){
 			dibujarTerreno();
 			
 			//Si has hecho click sobre una ficha existente, se señala y se pone como cogido:
-			let selec = -1;
+			selec = -1;
 			
 			for(let i = 0; i<banquillo1.jugadores.length;i++){;
 				console.log(Math.floor(banquillo1.jugadores[i].posx/dim) + "- " + 
@@ -193,65 +200,142 @@ function gameclick(e){
 			//Redibuja el terreno
 			dibujarTerreno();
 			
-			//Coloca la imagen de la ficha donde desearía colocarlo
-			if(){
+			//Condicion para colocar la ficha en la pista
+			let colocable = false;
+			
+			if(fila>=0 && fila<9 && columna>0 && columna<10){
+				colocable = true;
 			}
-			let ctx = cv.getContext('2d'),
-				img = new Image();
+			
+			//Coloca la imagen de la ficha donde desearía colocarlo
+			if(colocable){
+				let ctx = cv.getContext('2d'),
+					img = new Image();
+					
+				img.onload= function(){
+					ctx.drawImage(img, columna*dim, fila*dim, dim, dim);
+				};
+				img.src = "img/ficharoja.svg";
 				
-			img.onload= function(){
-				ctx.drawImage(img, columna*dim, fila*dim, dim, dim);
-			};
-			img.src = "img/ficharoja.svg";
-			
-			//Pinta el recuadro que remarca la ficha
-			ctx.beginPath();
-			ctx.strokeStyle = '#a22';
-			ctx.lineWidth = 2;
-			ctx.strokeRect(columna * dim, fila * dim, dim, dim);
-			
-			//Cambia de turno
-			sessionStorage["turno"] = "2";
+				//Pinta el recuadro que remarca la ficha
+				ctx.beginPath();
+				ctx.strokeStyle = '#a22';
+				ctx.lineWidth = 2;
+				ctx.strokeRect(columna * dim, fila * dim, dim, dim);
+				
+				//Cambia de turno
+				sessionStorage["turno"] = "2";
+			}
 		}
 	}else{
-		/*let cv = e.target,
-			x = e.offsetX,
-			y = e.offsetY,
-			dim = cv.width / 20,
-			fila = Math.floor( y / dim),
-			columna = Math.floor( x / dim);
+		//Si no hay una ficha cogida en el turno del jugador 1, se escoge ficha
+		if(sessionStorage["selected"] == "false"){
+			//Datos de cálculo
+			let cv = e.target,
+				x = e.offsetX,
+				y = e.offsetY,
+				ctx = cv.getContext("2d");
+				dim = cv.width / 20,
+				fila = Math.floor( y / dim),
+				columna = Math.floor( x / dim);
 
-		if(x<1 || x>cv.width-1 || y<1 || y>cv.height-1){
-			return;
-		}
-	
-		console.log("JUGADOR 2");
-		console.log(" Posicion: ${x} - ${y}");
-		console.log(' Posicion: '+ x +' - '+ y);
-		console.log('CLICK=>fila:'+fila+' columna:'+columna);
+			if(x<1 || x>cv.width-1 || y<1 || y>cv.height-1){
+				return;
+			}
 
-		cv.width = cv.width;
-		
-		dibujarTerreno();
-		
-		let ctx = cv.getContext('2d'),
-			img = new Image();
+			console.log("JUGADOR 2");
+			console.log("COGIENDO FICHA");
+			console.log(" Posicion: ${x} - ${y}");
+			console.log(' Posicion: '+ x +' - '+ y);
+
 			
-		img.onload= function(){
-			ctx.drawImage(img, columna*dim, fila*dim, dim, dim);
-		};
-		img.src = "img/fichaazul.svg";
-		
-		//Pinta el recuadro que remarca la ficha
-		ctx.beginPath();
-		ctx.strokeStyle = '#00b';
-		ctx.lineWidth = 2;
-		ctx.strokeRect(columna * dim, fila * dim, dim, dim);*/
-		
-		sessionStorage["turno"] = "1";
+			//Pa limpiar ese canvas rico
+			cv.width = cv.width;
+			
+			//Redibuja el terreno
+			dibujarTerreno();
+			
+			//Si has hecho click sobre una ficha existente, se señala y se pone como cogido:
+			selec = -1;
+			
+			for(let i = 0; i<banquillo2.jugadores.length;i++){;
+				console.log(Math.floor(banquillo2.jugadores[i].posx/dim) + "- " + 
+				Math.floor(banquillo2.jugadores[i].posy/dim)+ " es igual a " 
+				+ columna +" - " + fila);
+				if(Math.floor(banquillo2.jugadores[i].posx/dim) == columna && Math.floor(banquillo2.jugadores[i].posy/dim) == fila){
+					selec = i;
+				}
+			}
+			
+			if(selec != -1){
+				//Se mete en el array de juego y se borra del array de banquillo	
+				enjuego2.jugadores.push(window.JSON.stringify(banquillo2.jugadores[selec]));
+				banquillo2.jugadores[selec].colocado = "true";
+				sessionStorage["equipo2"] = window.JSON.stringify(banquillo2);
+				
+				//Pinta el recuadro que remarca la ficha
+				ctx.beginPath();
+				ctx.strokeStyle = '#a22';
+				ctx.lineWidth = 2;
+				ctx.strokeRect(columna * dim, fila * dim+dim/4, dim, dim);
+				
+				//Se pone seleccionado igual a true si se ha seleccionado la ficha
+				sessionStorage["selected"] = "true";
+			}
+		}else{
+			//Datos de cálculo
+			let cv = e.target,
+				x = e.offsetX,
+				y = e.offsetY,
+				dim = cv.width / 20,
+				fila = Math.floor( y / dim),
+				columna = Math.floor( x / dim);
+
+			if(x<1 || x>cv.width-1 || y<1 || y>cv.height-1){
+				return;
+			}
+
+			console.log("JUGADOR 2");
+			console.log("DEJANDO FICHA");
+			console.log(" Posicion: ${x} - ${y}");
+			console.log(' Posicion: '+ x +' - '+ y);
+			console.log('CLICK=>fila:'+fila+' columna:'+columna);
+
+			//Pa limpiar ese canvas rico
+			cv.width = cv.width;
+			
+			//Redibuja el terreno
+			dibujarTerreno();
+			
+			//Condicion para colocar la ficha en la pista
+			let colocable = false;
+			
+			if(fila>=10 && fila<19 && columna>0 && columna<10){
+				colocable = true;
+			}
+			
+			//Coloca la imagen de la ficha donde desearía colocarlo
+			if(colocable){
+				let ctx = cv.getContext('2d'),
+					img = new Image();
+					
+				img.onload= function(){
+					ctx.drawImage(img, columna*dim, fila*dim, dim, dim);
+				};
+				img.src = "img/fichaazul.svg";
+				
+				//Pinta el recuadro que remarca la ficha
+				ctx.beginPath();
+				ctx.strokeStyle = '#a22';
+				ctx.lineWidth = 2;
+				ctx.strokeRect(columna * dim, fila * dim, dim, dim);
+				
+				//Cambia de turno
+				sessionStorage["turno"] = "1";
+			}
+		}
 	}
 }
-
 
 function down(e){
 	//Este funciona cuando haces click
@@ -278,6 +362,11 @@ function cargarJuego(){
 	//Asignamos el turno inicial
 	if(!sessionStorage["turno"]){
 		sessionStorage["turno"] = "1";
+	}
+	
+	//Iniciamos la fase de colocacion
+	if(!sessionStorage["fase"]){
+		sessionStorage["fase"]="colocar";
 	}
 	//#####################
 }
