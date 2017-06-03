@@ -23,13 +23,13 @@ function cargaPlantilla(){
 	
 	//Inicializamos el array de jugadores de cada equipo
 	for(i = 0; i<numJugadores/2; i++){
-		let jugadores1 = '"{"posx":0,"posy":0,"img":"img/ficharoja.svg"}"';
-		equipo1.jugadores.push({"posx":0,"posy":0,"img":"img/ficharoja.svg"});
+		let jugadores1 = '"{"posx":0,"posy":0,"img":"img/ficharoja.svg","colocado":false}"';
+		//equipo1.jugadores.push({"posx":0,"posy":0,"img":"img/ficharoja.svg","colocado":false});
 	}
 	
 	for(i = 0; i<numJugadores/2; i++){
 		let jugadores2 = '"{"posx":0,"posy":0,"img":"img/fichaazul.svg"}"';
-		//equipo2.jugadores.push({"posx":0,"posy":0,"img":"img/fichaazul.svg"});
+		//equipo2.jugadores.push({"posx":0,"posy":0,"img":"img/fichaazul.svg","colocado":false});
 	}
 	
 	//Los metemos dentro del array JSON
