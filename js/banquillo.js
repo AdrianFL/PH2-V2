@@ -34,7 +34,7 @@ function cargaPlantilla(){
 		}
 		
 		for(let i = 0; i<numJugadores/2; i++){
-			equipo2.jugadores.push({"posx":0,"posy":0,"img":"img/fichaazul.svg","colocado":"false"});
+			equipo2.jugadores.push({"posx":0,"posy":0,"img":"img/fichaverde.svg","colocado":"false"});
 		}
 		
 		//Los metemos dentro del array JSON

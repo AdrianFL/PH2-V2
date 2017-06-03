@@ -75,7 +75,20 @@ body{
 			padding:0 auto;
 			margin:10px auto;
 		}
-
+	body>footer{
+		width:90%;
+		height:auto;
+	}
+		footer>img{
+			margin:.1em auto;
+			
+			height:2em;
+			width:auto;
+			
+			border:2px dashed #aa0;
+			border-radius:50%;
+			
+		}
 /*Formularios*/
 
 
