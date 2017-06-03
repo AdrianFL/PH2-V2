@@ -101,6 +101,21 @@ function dibujarPorterias()
 function gameclick(e){
 	if(sessionStorage["fase"] == "colocar"){
 		colocacion(e);
+		
+		//Si es igual al número de jugadores los colocados, se va a la segunda etapa.
+		let cont = 0;
+		for(let i = 0; i<banquillo1.jugadores.length;i++){
+			if(banquillo1.jugadores[i].colocado == "true"){
+				cont++;
+			}
+			if(banquillo2.jugadores[i].colocado == "true"){
+				cont++;
+			}
+		}
+		
+		if(cont == 1){
+			jugarAparece();
+		}
 	}
 }
 
@@ -124,8 +139,8 @@ function colocacion(e){
 
 			console.log("JUGADOR 1");
 			console.log("COGIENDO FICHA");
-			console.log(" Posicion: ${x} - ${y}");
-			console.log(' Posicion: '+ x +' - '+ y);
+			/*console.log(" Posicion: ${x} - ${y}");
+			console.log(' Posicion: '+ x +' - '+ y);*/
 
 			
 			//Pa limpiar ese canvas rico
@@ -138,9 +153,9 @@ function colocacion(e){
 			selec = -1;
 			
 			for(let i = 0; i<banquillo1.jugadores.length;i++){;
-				console.log(Math.floor(banquillo1.jugadores[i].posx/dim) + "- " + 
+				/*console.log(Math.floor(banquillo1.jugadores[i].posx/dim) + "- " + 
 				Math.floor(banquillo1.jugadores[i].posy/dim)+ " es igual a " 
-				+ columna +" - " + fila);
+				+ columna +" - " + fila);*/	 
 				if(Math.floor(banquillo1.jugadores[i].posx/dim) == columna && Math.floor(banquillo1.jugadores[i].posy/dim) == fila){
 					selec = i;
 				}
@@ -157,12 +172,6 @@ function colocacion(e){
 				}else{
 					ctx.strokeRect(columna * dim, fila * dim, dim, dim);
 				}
-				
-				
-				//Se mete en el array de juego y se borra del array de banquillo	
-				//enjuego1.jugadores.push(window.JSON.stringify(banquillo1.jugadores[selec]));
-				banquillo1.jugadores[selec].colocado = "true";
-				sessionStorage["equipo1"] = window.JSON.stringify(banquillo1);
 				
 				//Se pone seleccionado igual a true si se ha seleccionado la ficha
 				sessionStorage["selected"] = "true";
@@ -182,9 +191,9 @@ function colocacion(e){
 
 			console.log("JUGADOR 1");
 			console.log("DEJANDO FICHA");
-			console.log(" Posicion: ${x} - ${y}");
+			/*console.log(" Posicion: ${x} - ${y}");
 			console.log(' Posicion: '+ x +' - '+ y);
-			console.log('CLICK=>fila:'+fila+' columna:'+columna);
+			console.log('CLICK=>fila:'+fila+' columna:'+columna);*/
 
 			//Pa limpiar ese canvas rico
 			cv.width = cv.width;
@@ -212,7 +221,11 @@ function colocacion(e){
 				//Actualizamos la posición de los objetos
 				banquillo1.jugadores[selec].posy = fila*dim;
 				banquillo1.jugadores[selec].posx = columna*dim;
+				banquillo1.jugadores[selec].colocado = "true";
 				sessionStorage["equipo1"] = window.JSON.stringify(banquillo1);
+				
+				//Se mete en el array de juego y se borra del array de banquillo	
+				//enjuego1.jugadores.push(window.JSON.stringify(banquillo1.jugadores[selec]));
 				
 				let ctx = cv.getContext('2d');
 					/*img = new Image();
@@ -252,8 +265,8 @@ function colocacion(e){
 
 			console.log("JUGADOR 2");
 			console.log("COGIENDO FICHA");
-			console.log(" Posicion: ${x} - ${y}");
-			console.log(' Posicion: '+ x +' - '+ y);
+			/*console.log(" Posicion: ${x} - ${y}");
+			console.log(' Posicion: '+ x +' - '+ y);*/
 
 			
 			//Pa limpiar ese canvas rico
@@ -307,9 +320,9 @@ function colocacion(e){
 
 			console.log("JUGADOR 2");
 			console.log("DEJANDO FICHA");
-			console.log(" Posicion: ${x} - ${y}");
+			/*console.log(" Posicion: ${x} - ${y}");
 			console.log(' Posicion: '+ x +' - '+ y);
-			console.log('CLICK=>fila:'+fila+' columna:'+columna);
+			console.log('CLICK=>fila:'+fila+' columna:'+columna);*/
 
 			//Pa limpiar ese canvas rico
 			cv.width = cv.width;
@@ -373,6 +386,40 @@ function up(e){
 	
 	//Hacer drag-and-drop con esto too
 }
+
+//Devuelve el html de una página web
+function cargaPagina(href){
+	return '<object type="text/html" data="'+href+'" ></object>';
+}
+
+//Devuelve
+function jugarAparece(){
+	//Se carga el boton de jugar
+	let botonJugar = cargaPagina("boton_jugar.html");
+	let seccion = document.createElement("section");
+	console.log(botonJugar);
+	console.log(botonJugar.indexOf("<body>") +" - "+botonJugar.indexOf("</body>"));
+	seccion.innerHTML = botonJugar.substr(botonJugar.indexOf("<body>"),botonJugar.indexOf("</body>"));
+	seccion.setAttribute("id","botonJugar");
+	
+	//Se mete dentro del documento
+	let main = document.querySelector("main");
+	main.appendChild(seccion);
+}
+
+function marcador(){
+	let marcador = cargaPagina("marcador.html");
+	
+}
+
+function startJugar(){
+	
+	sessionStorage["fase"] == "jugar";
+}
+function jugar(){
+	
+}
+
 //#####################
 
 
@@ -389,15 +436,8 @@ function cargarJuego(){
 		sessionStorage["turno"] = "1";
 	}
 	
-	//Iniciamos la fase de colocacion
-	if(!sessionStorage["fase"]){
-		sessionStorage["fase"]="colocar";
-	}
-	
-	//if(!sessionStorage["selected"]){
-		sessionStorage["selected"] = "false";
-	//}
-	
+	sessionStorage["selected"] = "false";
+
 	//Datos principales: banquillo y fichas en juego
 	if(sessionStorage["equipo1"]!=null && sessionStorage["equipo1"]!=""){
 		banquillo1 = window.JSON.parse(sessionStorage["equipo1"]);
@@ -409,7 +449,6 @@ function cargarJuego(){
 		enjuego2 = window.JSON.parse(sessionStorage["equipo2"]);
 		enjuego2.jugadores.splice(0,numJugadores);
 	}
-	
 	//#####################
 }
 
