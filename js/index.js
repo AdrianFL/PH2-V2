@@ -1,5 +1,5 @@
 //Inicialización del sessionStorage
-/*if(sessionStorage["equipo1"]==null || sessionStorage["equipo1"]==""){
+if(sessionStorage["equipo1"]==null || sessionStorage["equipo1"]==""){
 	sessionStorage["equipo1"] ='{"nombre":"","jugadores":[]}';
 	sessionStorage["equipo2"] ='{"nombre":"","jugadores":[]}';
 }else{
@@ -10,7 +10,7 @@
 		sessionStorage["equipo1"] ='{"nombre":"","jugadores":[]}';
 		sessionStorage["equipo2"] ='{"nombre":"","jugadores":[]}';
 	}
-}*/
+}
 
 //funcion que genera el formulario de juego
 function generaForm(){
@@ -33,7 +33,7 @@ function generaForm(){
 		;
 	
 	
-	if(sessionStorage["nequipo1"]!=null &&  sessionStorage["nequipo1"]!=""){
+	if( sessionStorage["nequipo1"]!=null &&  sessionStorage["nequipo1"]!=""){
 		
 		document.getElementById("nequipo1").value = sessionStorage["nequipo1"];
 		document.getElementById("nequipo2").value = sessionStorage["nequipo2"];
@@ -66,13 +66,13 @@ function generaBoton(){
 				sessionStorage["nequipo2"] = document.getElementById("nequipo2").value;
 				
 				//Actualizamos los equipos
-				/*let aux1 = window.JSON.parse(sessionStorage["equipo1"]);
+				let aux1 = window.JSON.parse(sessionStorage["equipo1"]);
 				aux1.nombre = sessionStorage["nequipo1"];
 				sessionStorage["equipo1"] = window.JSON.stringify(aux1);
 				
 				let aux2 = window.JSON.parse(sessionStorage["equipo2"]);
 				aux2.nombre = sessionStorage["nequipo2"];
-				sessionStorage["equipo2"] = window.JSON.stringify(aux2);*/
+				sessionStorage["equipo2"] = window.JSON.stringify(aux2);
 				
 				document.querySelector("body>main>section>form").submit();
 			});

@@ -244,8 +244,19 @@ function colocacion(e){
 				
 				//Cambia de turno
 				sessionStorage["selected"]= "false";
-				sessionStorage["turno"] = "2";
+				
 			}
+		}
+		
+		//Si han sido colocadas todas las fichas se cambia de jugador
+		let cont = 0;
+		for(let i = 0; i<banquillo1.jugadores.length;i++){
+			if(banquillo1.jugadores[i].colocado == "true"){
+				cont++;
+			}
+		}
+		if(cont == 5){
+			sessionStorage["turno"] = "2";
 		}
 	}else{
 		//Si no hay una ficha cogida en el turno del jugador 1, se escoge ficha
@@ -369,8 +380,18 @@ function colocacion(e){
 				
 				//Cambia de turno
 				sessionStorage["selected"]= "false";
-				sessionStorage["turno"] = "1";
 			}
+		}
+		
+		//Si han sido colocadas todas las fichas se cambia de jugador
+		let cont = 0;
+		for(let i = 0; i<banquillo2.jugadores.length;i++){
+			if(banquillo2.jugadores[i].colocado == "true"){
+				cont++;
+			}
+		}
+		if(cont == 5){
+			sessionStorage["turno"] = "1";
 		}
 	}
 }
