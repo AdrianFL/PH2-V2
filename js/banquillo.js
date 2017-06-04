@@ -71,9 +71,21 @@ function cargaPlantilla(){
 	sessionStorage["equipo1"] = window.JSON.stringify(equipo1);
 	sessionStorage["equipo2"] = window.JSON.stringify(equipo2);
 }
+
+function cargaPag(href){
+	let xhr= new XMLHttpRequest();
+	let fText = "";
+	xhr.open('GET', href, true);
+	xhr.onreadystatechange= function() {
+		fText = xhr.responseText;
+	};
+	xhr.send();
+	return fText;
+}
+
 //Función que dibuja el banquillo en su propio canvas
 function dibujaBanquillo(){
-	let cv = document.getElementById('cv01');
+	/*let cv = document.getElementById('cv01');
 	let ctx = cv.getContext('2d');
 	let dim = cv.width / 20;
 	
@@ -113,6 +125,15 @@ function dibujaBanquillo(){
 			ctx.drawImage(img,equipo2.jugadores[i].posx,equipo2.jugadores[i].posy,dim,dim);
 		}
 		img.src = equipo2.jugadores[i].img;
-	}
+	}*/
+	
+	//cargamos la plantilla en el footer
+	let main = document.querySelector("main");
+	let footer = document.createElement("footer");
+	footer.innerHTML = cargaPag("banquillo.html");
+	console.log(cargaPag("banquillo.html"));
+	main.appendChild(footer);
+	
+	
 }
 
